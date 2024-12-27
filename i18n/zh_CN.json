@@ -1,5 +1,7 @@
 {
-    "resume":"个人简历",
+    "resume": "个人简历",
+    "info":"信息",
     "name":"姓名",
-    "major":"专业"
+    "working":"工作年限",
+    "email":"邮箱地址"
 }

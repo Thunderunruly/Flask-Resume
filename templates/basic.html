@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for("static",filename="css/" + data.style + ".css")}}">
+    <title>{{i18n.resume}}</title>
+    <style>
+        @media print {
+        .no-print {
+            display: none;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-between">
+        <h1>{{i18n.resume}}</h1>
+        <div class="flex gap-8 center">
+            <div>
+                <button class="no-print" onclick="window.print()">Print Page</button>
+            </div>
+            <a href="/edit"><button class="no-print">Edit</button></a>
+        </div>
+    </div>
+    <div>
+        <fieldset>
+            <legend>{{i18n.info}}</legend>
+            <ul>
+                {% for key, value in data.info.items() %}
+                {% if key != 'photo' %}
+                <li>{{i18n[key]}}:{{value}}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </fieldset>
+    </div>
+    <p>{{ data.info }}</p>
+    <p>{{ data.education }}</p>
+    <p>{{ data.skill }}</p>
+    <p>{{ data.experience }}</p>
+    <p>{{ data.bio }}</p>
+</body>
+<script>
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'p' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        window.print();
+      }
+    });
+  </script>
+</html>

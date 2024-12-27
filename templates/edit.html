@@ -3,11 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume</title>
+    <link rel="stylesheet" href="{{url_for("static",filename="css/basic.css")}}">
+    <title>{{i18n.resume}}</title>
 </head>
 <body>
-    <h1>Resume</h1>
-    <p>{{ data }}</p>
-    <p>{{ data.info }}</p>
+    <div class="flex flex-between">
+        <h1>{{i18n.resume}}</h1>
+        <div class="flex gap-8 center">
+            <a href="/"><button>Generate Resume</button></a>
+            <form action="?language" method="post">
+                <input type="hidden" name="form_id" value="language_form">
+                <select name="language" id="language" onchange="this.form.submit()">
+                    {% for language in languages %}
+                    <option value="{{language}}" {% if language == data.language %}selected{% endif %}>{{language}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            <form action="?style" method="post">
+                <input type="hidden" name="form_id" value="style_form">
+                <select name="style" id="style" onchange="this.form.submit()">
+                    {% for style in styles %}
+                    <option value="{{style}}" {% if style == data.style %}selected{% endif %}>{{style}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+    <div>
+        1
+    </div>
 </body>
 </html>

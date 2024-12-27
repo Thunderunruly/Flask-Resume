@@ -1,0 +1,32 @@
+body {
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.gap-8 {
+    display: flex;
+    gap: 8px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
