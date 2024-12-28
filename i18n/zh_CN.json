@@ -21,5 +21,8 @@
     "cate_langauge":"语言类",
     "cate_office":"办公类",
     "experience":"项目经历",
-    "bio":"自我描述"
+    "bio":"自我描述",
+    "project_background":"项目背景",
+    "project_responsibilities":"项目职责",
+    "project_technology":"技术栈"
 }

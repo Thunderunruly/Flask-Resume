@@ -21,5 +21,8 @@
     "cate_langauge":"Langauge",
     "cate_office":"Office",
     "experience":"Experiences",
-    "bio":"BIO"
+    "bio":"BIO",
+    "project_background":"Background",
+    "project_responsibilities":"Responsibilities",
+    "project_technology":"Technology"
 }

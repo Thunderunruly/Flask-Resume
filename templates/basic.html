@@ -107,20 +107,20 @@
         <h2 class="label-4">{{i18n.experience}}</h2>
         <ul>
             {% for experience in data.experience %}
-            <li>
+            <li style="margin-bottom: 8px;">
                 <div style="display: flex; gap: 4px;">
                     <h4>{{experience.title}}</h4> - <span>{{experience.time}}</span>
                 </div>
                 <div>
-                    <h5 class="label-4">项目背景</h5>
+                    <h5 class="label-4">{{i18n.project_background}}</h5>
                     <p class="c-p">
                         {{experience.background}}
                     </p>
-                    <h5 class="label-4">职责</h5>
+                    <h5 class="label-4">{{i18n.project_responsibilities}}</h5>
                     <p class="c-p">
                         {{experience.responsibilities}}
                     </p>
-                    <h5 class="label-4">技术栈</h5>
+                    <h5 class="label-4">{{i18n.project_technology}}</h5>
                     <div style="display: flex; gap: 4px;">
                         {% for tech in experience.technology_use %}
                         <div class="tag">{{tech}}</div>
