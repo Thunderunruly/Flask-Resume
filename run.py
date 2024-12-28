@@ -6,7 +6,7 @@ import subprocess
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = './static/files'
+UPLOAD_FOLDER = './static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

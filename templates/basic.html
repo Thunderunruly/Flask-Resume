@@ -44,7 +44,9 @@
                     {% endfor %}
                 </ul>
                 {% if data.info.photo %}
-                <img src="{{data.info.photo}}" alt="Photo" class="photo">
+                <div class="photo-btn" style="cursor: auto;">
+                    <img src="{{url_for("static", filename=data.info.photo)}}" alt="Photo">
+                </div>
                 {% endif%}
             </div>
         </fieldset>
