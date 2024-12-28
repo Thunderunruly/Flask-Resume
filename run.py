@@ -114,9 +114,19 @@ def edit_page():
                         filename = secure_filename(photo.filename)
                         saved_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                         photo.save(saved_file_path)
-                info['photo'] = "files/" + filename
+                        info['photo'] = "files/" + filename
                 json_write(file_path,info,"info")
-                # TODO MORE
+                bio = request.form['bio']
+                json_write(file_path,bio,"bio")
+                skill_professional = request.form.getlist("professional[]")
+                skill_language = request.form.getlist("language[]")
+                skill_office = request.form.getlist("office[]")
+                skill = {
+                    "professional":skill_professional,
+                    "language":skill_language,
+                    "office":skill_office
+                }
+                json_write(file_path,skill,"skill")
             elif action == "cancel":
                 pass
             elif action == "add_info":
@@ -130,6 +140,20 @@ def edit_page():
                 if id_to_delete in info:
                     del info[id_to_delete]
                 json_write(file_path, info, "info")
+        elif form_id == "skill_form":
+            skill_index = int(request.form['skill_index'])
+            skill_key = request.form['skill_key']
+            action = request.form.get('action')
+            skill = content['skill']
+            print("Skill key:", skill_key)
+            print("Skill list:", skill[skill_key])
+            print("Skill index:", skill_index)
+            if action == "add":
+                skill[skill_key].insert(skill_index, "")
+            elif action == "delete":
+                skill[skill_key].pop(skill_index - 1)
+
+            json_write(file_path,skill,"skill")
         return redirect(url_for("edit_page"))
 
 

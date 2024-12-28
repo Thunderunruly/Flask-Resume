@@ -117,17 +117,36 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff;
 }
 
-.c-button:hover {
+.c-circle {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #52575b;
+    color: #ffffff;
+}
+
+.c-button:hover,
+.c-circle:hover {
     background-color: #8a8f92;
 }
 
-.c-button:focus {
+.c-button:focus,
+.c-circle:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(111, 113, 114, 0.5);
 }
 
 .c-select,
-.c-input {
+.c-input,
+.c-textarea {
     display: block;
     width: 100%;
     padding: 10px;
@@ -136,6 +155,7 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.3;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
     background-color: #fff;
 }
 
@@ -151,7 +171,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .c-select:focus,
-.c-input:focus {
+.c-input:focus,
+.c-textarea:focus {
     outline: none;
     border-color: #52575b;
     box-shadow: 0 0 0 3px rgba(111, 113, 114, 0.5);
@@ -169,8 +190,14 @@ h1, h2, h3, h4, h5, h6 {
 .footer {
     display: flex;
     justify-content: flex-end;
-    margin: 8px;
     gap: 8px;
+    padding: 8px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background: white;
+    width: 100%;
+    box-shadow: 1px -1px 2px 2px lightcoral;
 }
 
 .c-fieldset {
@@ -223,4 +250,8 @@ h1, h2, h3, h4, h5, h6 {
     padding: 2px 8px;
     border-radius: 4px;
     background: rgb(255, 232, 232);
+}
+
+.c-textarea {
+    min-height: 100px;
 }

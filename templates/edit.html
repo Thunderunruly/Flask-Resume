@@ -67,17 +67,163 @@
             </form>
         </fieldset>
     </fieldset>
+    <div style="margin-top: 8px;">
+        <h2 class="label-4">{{i18n.edu_background}}</h2>
+        {% for education in data.education %}
+        <div style="margin-top: 8px; border-left: 2px solid lightcoral; margin-left: 16px; margin-right: 16px; padding: 4px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <div style="flex: 1;">
+                    <div class="flex flex-align-center" >
+                        <div class="flex margin-after-8 bold">
+                            <div class="label-4">{{i18n.school}}</div>
+                            :
+                        </div>
+                        <input type="text" name="educationp[{{loop.index - 1}}][school]" style="flex: 1;" class="c-input" value="{{education.school}}">
+                        <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][school_original_name]" value="{{education.school_original_name}}"></span>
+                    </div>
+                    
+                </div>
+                <div style="margin-left: 8px; display: flex; justify-content: center; align-items: center; gap: 4px;">
+                    <input type="month" value="{{education.duration.split(" - ")[0]}}" name="education[{{loop.index - 1}}][start]" class="c-input">
+                    <strong>-</strong>
+                    <input type="month" value="{{education.duration.split(" - ")[1]}}" name="education[{{loop.index - 1}}][end]" class="c-input">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <div class="flex flex-align-center" style="width: 100%;">
+                    <div class="flex margin-after-8 bold">
+                        <div class="label-4">{{i18n.major}}</div>
+                        :
+                    </div>
+                    <input type="text" name="education[{{loop.index - 1}}][major]" style="width: 50%;" value="{{education.major}}" class="c-input">
+                    <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][major_orginal_name]" value="{{education.major_orginal_name}}"></span>
+                </div>
+            </div>
+            <div>
+                <form action="?education" method="post" style="text-align: right; margin-top: 8px;">
+                    <input type="hidden" name="form_id" value="education_form">
+                    <button type="submit" class="c-button warning-btn" name="action" value="delete">{{i18n.delete}}</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        <form action="?education" method="post" style="margin: 20px; text-align: right;">
+            <input type="hidden" name="form_id" value="education_form">
+            <button type="submit" class="c-button" name="action" value="add">{{i18n.add}}</button>
+        </form>
+    </div>
+    <div>
+        <h2 class="label-4">{{i18n.skill}}</h2>
+        <div style="margin-left: 8px;">
+            <h4 style="color: lightcoral;">{{i18n.cate_professional}}</h4>
+            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column;">
+                {% for professional in data.skill.professional %}
+                <li>
+                    <form action="?edit" method="post">
+                        <input type="hidden" name="skill_key" value="professional">
+                        <input type="hidden" name="skill_index" value="{{loop.index}}">
+                        <input type="hidden" name="form_id" value="skill_form">
+                        <div style="display: flex; gap: 4px;">
+                            <input type="text" name="professional[]" class="c-input" value="{{professional}}" data-index="{{loop.index}}" onchange="syncSkills(event)">
+                            <button type="submit" class="c-circle" name="action" value="add">+</button>
+                            <button type="submit" name="action" class="c-circle warning-btn" value="delete">-</button>
+                        </div>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <h4 style="color: lightcoral;">{{i18n.cate_langauge}}</h4>
+            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column;">
+                {% for language in data.skill.language %}
+                <li>
+                    <form action="?edit" method="post">
+                        <input type="hidden" name="skill_key" value="language">
+                        <input type="hidden" name="skill_index" value="{{loop.index}}">
+                        <input type="hidden" name="form_id" value="skill_form">
+                        <div style="display: flex; gap: 4px;">
+                            <input type="text" name="language[]" class="c-input" value="{{language}}" data-index="{{loop.index}}" onchange="syncSkills(event)">
+                            <button type="submit" class="c-circle" name="action" value="add">+</button>
+                            <button type="submit" name="action" class="c-circle warning-btn" value="delete">-</button>
+                        </div>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <h4 style="color: lightcoral;">{{i18n.cate_office}}</h4>
+            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column;">
+                {% for office in data.skill.office %}
+                <li>
+                    <form action="?edit" method="post">
+                        <input type="hidden" name="skill_key" value="office">
+                        <input type="hidden" name="skill_index" value="{{loop.index}}">
+                        <input type="hidden" name="form_id" value="skill_form">
+                        <div style="display: flex; gap: 4px;">
+                            <input type="text" name="office[]" class="c-input" value="{{office}}" data-index="{{loop.index}}" onchange="syncSkills(event)">
+                            <button type="submit" class="c-circle" name="action" value="add">+</button>
+                            <button type="submit" name="action" class="c-circle warning-btn" value="delete">-</button>
+                        </div>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2 class="label-4">{{i18n.experience}}</h2>
+        <ul>
+            {% for experience in data.experience %}
+            <li style="margin-bottom: 8px;">
+                <div style="display: flex; gap: 4px;">
+                    <h4>{{experience.title}}</h4> - <span>{{experience.time}}</span>
+                </div>
+                <div>
+                    <h5 class="label-4">{{i18n.project_background}}</h5>
+                    <p class="c-p">
+                        {{experience.background}}
+                    </p>
+                    <h5 class="label-4">{{i18n.project_responsibilities}}</h5>
+                    <p class="c-p">
+                        {{experience.responsibilities}}
+                    </p>
+                    <h5 class="label-4">{{i18n.project_technology}}</h5>
+                    <div style="display: flex; gap: 4px;">
+                        {% for tech in experience.technology_use %}
+                        <div class="tag">{{tech}}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
     <form action="?edit" id="form1" method="post" enctype="multipart/form-data">
+        <div class="flex">
+            <div style="width: 90%;">
+                <label for="bio"><h2 class="label-4">{{i18n.bio}}</h2></label>
+                <!-- <input type="text" class="c-input" name="bio" value="{{ data.bio }}"> -->
+                 <textarea name="bio" class="c-textarea" id="bio" rows="1" style="margin-bottom: 120px;">{{data.bio}}</textarea>
+            </div>
+        </div>
         {% for key, value in data.info.items() %}
         {% if key != 'photo' %}
         <input type="hidden" name="info[{{key}}]" value="{{value}}">
         {% endif %}
         {% endfor %}
+        {% for professional in data.skill.professional %}
+        <input type="hidden" id="professional[]-{{loop.index}}" name="professional[]" value="{{professional}}">
+        {% endfor %}
+        {% for language in data.skill.language %}
+        <input type="hidden" id="language[]-{{loop.index}}" name="language[]" value="{{language}}">
+        {% endfor %}
+        {% for office in data.skill.office %}
+        <input type="hidden" id="office[]-{{loop.index}}" name="office[]" value="{{office}}">
+        {% endfor %}
         <input type="file" id="photo-input" name="photo" accept="image/*" style="display: none;" onchange="handleFileChange(event)">
         <input type="hidden" name="form_id" value="edit_form">
         <div class="footer">
-            <button type="submit" name="action" value="save" class="c-button">{{i18n.save}}</button>
             <button type="submit" name="action" value="cancel" class="c-button warning-btn">{{i18n.cancel}}</button>
+            <button type="submit" name="action" value="save" class="c-button">{{i18n.save}}</button>
         </div>
     </form>
     <script>
@@ -102,18 +248,32 @@
         }
 
         function syncInputs(event) {
-        const sourceInput = event.target;
+            const sourceInput = event.target;
 
-        const inputName = sourceInput.name;
+            const inputName = sourceInput.name;
 
-        const inputs = document.querySelectorAll(`input[name="${inputName}"]`);
+            const inputs = document.querySelectorAll(`input[name="${inputName}"]`);
 
-        inputs.forEach(input => {
-            if (input !== sourceInput) {
-                input.value = sourceInput.value;
+            inputs.forEach(input => {
+                if (input !== sourceInput) {
+                    input.value = sourceInput.value;
+                }
+            });
+        }
+
+        function syncSkills(event) {
+            const sourceInput = event.target;
+
+            const index = sourceInput.dataset.index;
+
+            const inputId = sourceInput.name + "-" + index;
+            
+            const targetInput = document.getElementById(inputId);
+
+            if (targetInput) {
+                targetInput.value = sourceInput.value;
             }
-        });
-    }
+        }
 
     </script>
 </body>
