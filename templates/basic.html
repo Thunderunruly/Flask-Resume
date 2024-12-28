@@ -83,24 +83,16 @@
     <div>
         <h2 class="label-4">{{i18n.skill}}</h2>
         <div style="margin-left: 8px;">
-            <h4 style="color: lightcoral;">{{i18n.cate_professional}}</h4>
+            {% for category, skills in data.skill.items() %}
+            {% if skills %}
+            <h4 style="color: lightcoral;">{{ i18n.get('cate_' + category, category) }}</h4>
             <ul class="c-ul">
-                {% for professional in data.skill.professional %}
-                <li>{{professional}}</li>
+                {% for skill in skills %}
+                <li>{{skill}}</li>
                 {% endfor %}
             </ul>
-            <h4 style="color: lightcoral;">{{i18n.cate_langauge}}</h4>
-            <ul class="c-ul">
-                {% for language in data.skill.language %}
-                <li>{{language}}</li>
-                {% endfor %}
-            </ul>
-            <h4 style="color: lightcoral;">{{i18n.cate_office}}</h4>
-            <ul class="c-ul">
-                {% for office in data.skill.office %}
-                <li>{{office}}</li>
-                {% endfor %}
-            </ul>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
     <div>
@@ -109,7 +101,7 @@
             {% for experience in data.experience %}
             <li style="margin-bottom: 8px;">
                 <div style="display: flex; gap: 4px;">
-                    <h4>{{experience.title}}</h4> - <span>{{experience.time}}</span>
+                    <h4>{{experience.title}}</h4> - <span>{{experience.duration}}</span>
                 </div>
                 <div>
                     <h5 class="label-4">{{i18n.project_background}}</h5>

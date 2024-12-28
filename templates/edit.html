@@ -78,15 +78,15 @@
                             <div class="label-4">{{i18n.school}}</div>
                             :
                         </div>
-                        <input type="text" name="educationp[{{loop.index - 1}}][school]" style="flex: 1;" class="c-input" value="{{education.school}}">
-                        <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][school_original_name]" value="{{education.school_original_name}}"></span>
+                        <input type="text" name="education[{{loop.index - 1}}][school]" style="flex: 1;" class="c-input" value="{{education.school}}" onchange="syncInputs(event)">
+                        <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][school_original_name]" onchange="syncInputs(event)" value="{{education.school_original_name}}"></span>
                     </div>
                     
                 </div>
                 <div style="margin-left: 8px; display: flex; justify-content: center; align-items: center; gap: 4px;">
-                    <input type="month" value="{{education.duration.split(" - ")[0]}}" name="education[{{loop.index - 1}}][start]" class="c-input">
+                    <input type="month" data-index="{{loop.index - 1}}" onchange="updateDuration(event, 'education')" value="{{education.duration.split(" - ")[0]}}" name="education[{{loop.index - 1}}][start]" class="c-input">
                     <strong>-</strong>
-                    <input type="month" value="{{education.duration.split(" - ")[1]}}" name="education[{{loop.index - 1}}][end]" class="c-input">
+                    <input type="month" onchange="updateDuration(event, 'education')" data-index="{{loop.index - 1}}" value="{{education.duration.split(" - ")[1]}}" name="education[{{loop.index - 1}}][end]" class="c-input">
                 </div>
             </div>
             <div style="display: flex; justify-content: space-between;">
@@ -95,8 +95,8 @@
                         <div class="label-4">{{i18n.major}}</div>
                         :
                     </div>
-                    <input type="text" name="education[{{loop.index - 1}}][major]" style="width: 50%;" value="{{education.major}}" class="c-input">
-                    <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][major_orginal_name]" value="{{education.major_orginal_name}}"></span>
+                    <input type="text" name="education[{{loop.index - 1}}][major]" style="width: 50%;" value="{{education.major}}" class="c-input" onchange="syncInputs(event)">
+                    <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][major_orginal_name]" onchange="syncInputs(event)" value="{{education.major_orginal_name}}"></span>
                 </div>
             </div>
             <div>
@@ -115,83 +115,84 @@
     <div>
         <h2 class="label-4">{{i18n.skill}}</h2>
         <div style="margin-left: 8px;">
-            <h4 style="color: lightcoral;">{{i18n.cate_professional}}</h4>
-            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column;">
-                {% for professional in data.skill.professional %}
-                <li>
-                    <form action="?edit" method="post">
-                        <input type="hidden" name="skill_key" value="professional">
-                        <input type="hidden" name="skill_index" value="{{loop.index}}">
+            {% for category, skills in data.skill.items() %}
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <h4 style="color: lightcoral;">{{ i18n.get('cate_' + category, category) }}</h4>
+                <form action="?edit" method="post" class="skill-form">
+                    <input type="hidden" name="skill_key" value="{{ category }}">
+                    <input type="hidden" name="skill_index" value="0">
+                    <input type="hidden" name="form_id" value="skill_form">
+                    <button type="submit" class="c-circle" name="action" value="add">✔</button>
+                    <button type="submit" class="c-circle warning-btn" name="action" value="delete_key">🗑</button>
+                </form>
+            </div>
+            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column; margin: 0; padding: 0; padding-left: 8px;">
+                {% for skill in skills %}
+                <li style="list-style: none; padding: 0; margin: 0;">
+                    <form action="?edit" method="post" class="skill-form">
+                        <input type="hidden" name="skill_key" value="{{ category }}">
+                        <input type="hidden" name="skill_index" value="{{ loop.index }}">
                         <input type="hidden" name="form_id" value="skill_form">
                         <div style="display: flex; gap: 4px;">
-                            <input type="text" name="professional[]" class="c-input" value="{{professional}}" data-index="{{loop.index}}" onchange="syncSkills(event)">
+                            <input type="text" name="{{ category }}[]"class="c-input" value="{{ skill }}" data-index="{{ loop.index }}" onchange="syncSkills(event)">
                             <button type="submit" class="c-circle" name="action" value="add">+</button>
-                            <button type="submit" name="action" class="c-circle warning-btn" value="delete">-</button>
+                            <button type="submit" class="c-circle warning-btn" name="action" value="delete">-</button>
                         </div>
                     </form>
                 </li>
                 {% endfor %}
             </ul>
-            <h4 style="color: lightcoral;">{{i18n.cate_langauge}}</h4>
-            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column;">
-                {% for language in data.skill.language %}
-                <li>
-                    <form action="?edit" method="post">
-                        <input type="hidden" name="skill_key" value="language">
-                        <input type="hidden" name="skill_index" value="{{loop.index}}">
-                        <input type="hidden" name="form_id" value="skill_form">
-                        <div style="display: flex; gap: 4px;">
-                            <input type="text" name="language[]" class="c-input" value="{{language}}" data-index="{{loop.index}}" onchange="syncSkills(event)">
-                            <button type="submit" class="c-circle" name="action" value="add">+</button>
-                            <button type="submit" name="action" class="c-circle warning-btn" value="delete">-</button>
-                        </div>
-                    </form>
-                </li>
-                {% endfor %}
-            </ul>
-            <h4 style="color: lightcoral;">{{i18n.cate_office}}</h4>
-            <ul class="c-ul" style="gap: 4px; display: flex; flex-direction: column;">
-                {% for office in data.skill.office %}
-                <li>
-                    <form action="?edit" method="post">
-                        <input type="hidden" name="skill_key" value="office">
-                        <input type="hidden" name="skill_index" value="{{loop.index}}">
-                        <input type="hidden" name="form_id" value="skill_form">
-                        <div style="display: flex; gap: 4px;">
-                            <input type="text" name="office[]" class="c-input" value="{{office}}" data-index="{{loop.index}}" onchange="syncSkills(event)">
-                            <button type="submit" class="c-circle" name="action" value="add">+</button>
-                            <button type="submit" name="action" class="c-circle warning-btn" value="delete">-</button>
-                        </div>
-                    </form>
-                </li>
-                {% endfor %}
-            </ul>
+            {% if loop.index < loop.length %}
+            <div style="width: 100%; border-top: 2px dashed lightcoral; margin-bottom: 8px; margin-top: 8px;"></div>
+            {% endif %}
+            {% endfor %}
+            <form action="?skill" method="post" style="display: flex; gap: 8px; margin: 8px;">
+                <div>
+                    <input type="text" class="c-input" name="skill_key">
+                </div>
+                <input type="hidden" name="skill_index" value="0">
+                <input type="hidden" name="form_id" value="skill_form">
+                <div>
+                    <button type="submit" class="c-button" name="action" value="add_more">{{i18n.add_more}}</button>
+                </div>
+            </form>
         </div>
     </div>
     <div>
         <h2 class="label-4">{{i18n.experience}}</h2>
-        <ul>
+        <ul style="padding: 0; padding-left: 8px;">
             {% for experience in data.experience %}
-            <li style="margin-bottom: 8px;">
-                <div style="display: flex; gap: 4px;">
-                    <h4>{{experience.title}}</h4> - <span>{{experience.time}}</span>
-                </div>
-                <div>
-                    <h5 class="label-4">{{i18n.project_background}}</h5>
-                    <p class="c-p">
-                        {{experience.background}}
-                    </p>
-                    <h5 class="label-4">{{i18n.project_responsibilities}}</h5>
-                    <p class="c-p">
-                        {{experience.responsibilities}}
-                    </p>
-                    <h5 class="label-4">{{i18n.project_technology}}</h5>
-                    <div style="display: flex; gap: 4px;">
-                        {% for tech in experience.technology_use %}
-                        <div class="tag">{{tech}}</div>
-                        {% endfor %}
+            <li style="margin-bottom: 8px; list-style: none;">
+                <fieldset class="c-fieldset">
+                    <div style="display: flex; gap: 4px; align-items: center;">
+                        <input type="text" style="flex: 3;" value="{{experience.title}}" class="c-input" name="experience[{{loop.index - 1}}][title]" onchange="syncInputs(event)">
+                        <input type="month" style="flex: 1;" name="experience[{{loop.index - 1}}][start]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[0]}}">
+                        -
+                        <input type="month" style="flex: 1;" name="experience[{{loop.index - 1}}][end]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[1]}}">
                     </div>
-                </div>
+                    <div>
+                        <h5 class="label-4">{{i18n.project_background}}</h5>
+                        <div>
+                            <textarea name="experience[{{loop.index - 1}}][background]" id="experience[{{loop.index - 1}}][background]" rows="1" class="c-textarea" onchange="syncInputs(event)">{{experience.background}}</textarea>
+                        </div>
+                        <h5 class="label-4">{{i18n.project_responsibilities}}</h5>
+                        <div>
+                            <textarea name="experience[{{loop.index - 1}}][responsibilities]" id="experience[{{loop.index - 1}}][responsibilities]" rows="1" class="c-textarea" onchange="syncInputs(event)">{{experience.responsibilities}}</textarea>
+                        </div>
+                        <h5 class="label-4">{{i18n.project_technology}}</h5>
+                        <div style="display: flex; gap: 4px;">
+                            {% for tech in experience.technology_use %}
+                            <div class="tag" style="display: flex;">
+                                {{tech}}
+                                <form action="?experience" method="post">
+                                    <input type="hidden" name="form_id" value="experience_form">
+                                    <button type="submit" style="font-size: 12px; background: transparent; border: none; cursor: pointer;">X</button>
+                                </form>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </fieldset>
             </li>
             {% endfor %}
         </ul>
@@ -209,14 +210,23 @@
         <input type="hidden" name="info[{{key}}]" value="{{value}}">
         {% endif %}
         {% endfor %}
-        {% for professional in data.skill.professional %}
-        <input type="hidden" id="professional[]-{{loop.index}}" name="professional[]" value="{{professional}}">
+        {% for education in data.education %}
+        <input type="hidden" name="education[{{loop.index - 1}}][school]" style="flex: 1;" value="{{education.school}}">
+        <input type="hidden" name="education[{{loop.index - 1}}][school_original_name]" value="{{education.school_original_name}}">
+        <input type="hidden" name="education[{{loop.index - 1}}][duration]" value="{{education.duration}}">
+        <input type="hidden" name="education[{{loop.index - 1}}][major]" value="{{education.major}}">
+        <input type="hidden" name="education[{{loop.index - 1}}][major_orginal_name]" value="{{education.major_orginal_name}}">
         {% endfor %}
-        {% for language in data.skill.language %}
-        <input type="hidden" id="language[]-{{loop.index}}" name="language[]" value="{{language}}">
+        {% for category, skills in data.skill.items() %}
+        {% for skill in skills %}
+                <input type="hidden" id="{{ category }}[]-{{ loop.index }}" name="{{ category }}[]" value="{{ skill }}">
+            {% endfor %}
         {% endfor %}
-        {% for office in data.skill.office %}
-        <input type="hidden" id="office[]-{{loop.index}}" name="office[]" value="{{office}}">
+        {% for experience in data.experience %}
+        <input type="hidden" value="{{experience.title}}" name="experience[{{loop.index - 1}}][title]">
+        <input type="hidden" value="{{experience.time}}" name="experience[{{loop.index - 1}}][duration]">
+        <input type="hidden" value="{{experience.background}}" name="experience[{{loop.index - 1}}][background]">
+        <input type="hidden" value="{{experience.responsibilities}}" name="experience[{{loop.index - 1}}][responsibilities]">
         {% endfor %}
         <input type="file" id="photo-input" name="photo" accept="image/*" style="display: none;" onchange="handleFileChange(event)">
         <input type="hidden" name="form_id" value="edit_form">
@@ -271,6 +281,21 @@
 
             if (targetInput) {
                 targetInput.value = sourceInput.value;
+            }
+        }
+
+        function updateDuration(event, name) {
+            const sourceInput = event.target;
+
+            const index = sourceInput.dataset.index;
+
+            const startInput = document.querySelector(`input[name="${name}[${index}][start]"]`);
+            const endInput = document.querySelector(`input[name="${name}[${index}][end]"]`);
+
+            const durationInput = document.querySelector(`input[name="${name}[${index}][duration]"]`);
+
+            if (durationInput) {
+                durationInput.value = `${startInput.value} - ${endInput.value}`;
             }
         }
 
