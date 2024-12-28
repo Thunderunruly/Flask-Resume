@@ -1,7 +1,25 @@
 {
-    "resume": "Resume",
+    "resume": "Personal Resume",
     "info": "Information",
     "name":"Name",
     "working":"Working",
-    "email":"Email"
+    "email":"Email",
+    "graduate":"Graduate",
+    "save":"Save",
+    "cancel":"Cancel",
+    "delete":"Delete",
+    "generate_resume":"Generate Resume",
+    "edit":"Edit",
+    "print":"Print",
+    "add_more":"Add More",
+    "add":"Add",
+    "edu_background":"Education Background",
+    "school":"School",
+    "major":"Major",
+    "skill":"Skill",
+    "cate_professional":"Professional",
+    "cate_langauge":"Langauge",
+    "cate_office":"Office",
+    "experience":"Experiences",
+    "bio":"BIO"
 }

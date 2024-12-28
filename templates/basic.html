@@ -15,31 +15,128 @@
 </head>
 <body>
     <div class="flex flex-between">
-        <h1>{{i18n.resume}}</h1>
+        <div>
+            <h1>{{i18n.resume}}</h1>
+            <h2 style="color: lightcoral;">Personal Resume</h2>
+        </div>
         <div class="flex gap-8 center">
             <div>
-                <button class="no-print" onclick="window.print()">Print Page</button>
+                <button class="no-print c-button" onclick="window.print()">{{i18n.print}}</button>
             </div>
-            <a href="/edit"><button class="no-print">Edit</button></a>
+            <a href="/edit"><button class="no-print c-button edit-btn">{{i18n.edit}}</button></a>
         </div>
     </div>
     <div>
-        <fieldset>
-            <legend>{{i18n.info}}</legend>
-            <ul>
-                {% for key, value in data.info.items() %}
-                {% if key != 'photo' %}
-                <li>{{i18n[key]}}:{{value}}</li>
-                {% endif %}
-                {% endfor %}
-            </ul>
+        <fieldset class="c-fieldset">
+            <legend><h2>{{i18n.info}}</h2></legend>
+            <div class="flex flex-between">
+                <ul class="grid-2 flex-1 grid-gap">
+                    {% for key, value in data.info.items() %}
+                    {% if key != 'photo' %}
+                    <li class="flex flex-align-center">
+                        <div class="flex margin-after-8 bold">
+                            <div class="label-4">{{i18n[key]}}</div>
+                            :
+                        </div>
+                        {{value}}
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% if data.info.photo %}
+                <img src="{{data.info.photo}}" alt="Photo" class="photo">
+                {% endif%}
+            </div>
         </fieldset>
     </div>
-    <p>{{ data.info }}</p>
-    <p>{{ data.education }}</p>
-    <p>{{ data.skill }}</p>
-    <p>{{ data.experience }}</p>
-    <p>{{ data.bio }}</p>
+    <div style="margin-top: 8px;">
+        <h2 class="label-4">{{i18n.edu_background}}</h2>
+        {% for education in data.education %}
+        <div style="margin-top: 8px; border-left: 2px solid lightcoral; margin-left: 16px; margin-right: 16px; padding: 4px;">
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                    <div class="flex flex-align-center">
+                        <div class="flex margin-after-8 bold">
+                            <div class="label-4">{{i18n.school}}</div>
+                            :
+                        </div>
+                        {{education.school}}
+                        <span style="color: gray; margin-left: 8px; font-size: 14px;">{{education.school_original_name}}</span>
+                    </div>
+                    
+                </div>
+                <div>{{education.duration}}</div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <div class="flex flex-align-center">
+                    <div class="flex margin-after-8 bold">
+                        <div class="label-4">{{i18n.major}}</div>
+                        :
+                    </div>
+                    {{education.major}}
+                    <span style="color: gray; margin-left: 8px; font-size: 14px;">{{education.major_orginal_name}}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div>
+        <h2 class="label-4">{{i18n.skill}}</h2>
+        <div style="margin-left: 8px;">
+            <h4 style="color: lightcoral;">{{i18n.cate_professional}}</h4>
+            <ul class="c-ul">
+                {% for professional in data.skill.professional %}
+                <li>{{professional}}</li>
+                {% endfor %}
+            </ul>
+            <h4 style="color: lightcoral;">{{i18n.cate_langauge}}</h4>
+            <ul class="c-ul">
+                {% for language in data.skill.language %}
+                <li>{{language}}</li>
+                {% endfor %}
+            </ul>
+            <h4 style="color: lightcoral;">{{i18n.cate_office}}</h4>
+            <ul class="c-ul">
+                {% for office in data.skill.office %}
+                <li>{{office}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2 class="label-4">{{i18n.experience}}</h2>
+        <ul>
+            {% for experience in data.experience %}
+            <li>
+                <div style="display: flex; gap: 4px;">
+                    <h4>{{experience.title}}</h4> - <span>{{experience.time}}</span>
+                </div>
+                <div>
+                    <h5 class="label-4">项目背景</h5>
+                    <p class="c-p">
+                        {{experience.background}}
+                    </p>
+                    <h5 class="label-4">职责</h5>
+                    <p class="c-p">
+                        {{experience.responsibilities}}
+                    </p>
+                    <h5 class="label-4">技术栈</h5>
+                    <div style="display: flex; gap: 4px;">
+                        {% for tech in experience.technology_use %}
+                        <div class="tag">{{tech}}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h2 class="label-4">{{i18n.bio}}</h2>
+        <p>
+            {{ data.bio }}
+        </p>
+    </div>
 </body>
 <script>
     document.addEventListener('keydown', function (event) {

@@ -1,7 +1,25 @@
 {
     "resume": "个人简历",
-    "info":"信息",
+    "info":"个人信息",
     "name":"姓名",
     "working":"工作年限",
-    "email":"邮箱地址"
+    "email":"邮箱地址",
+    "graduate":"学历",
+    "save":"保存",
+    "cancel":"取消",
+    "delete":"删除",
+    "generate_resume":"生成简历",
+    "edit":"编辑",
+    "print":"打印",
+    "add_more":"添加更多",
+    "add":"添加",
+    "edu_background":"教育背景",
+    "school":"学校",
+    "major":"专业",
+    "skill":"技能",
+    "cate_professional":"专业类",
+    "cate_langauge":"语言类",
+    "cate_office":"办公类",
+    "experience":"项目经历",
+    "bio":"自我描述"
 }

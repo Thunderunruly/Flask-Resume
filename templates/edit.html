@@ -10,10 +10,10 @@
     <div class="flex flex-between">
         <h1>{{i18n.resume}}</h1>
         <div class="flex gap-8 center">
-            <a href="/"><button>Generate Resume</button></a>
+            <a href="/"><button class="c-button">{{i18n.generate_resume}}</button></a>
             <form action="?language" method="post">
                 <input type="hidden" name="form_id" value="language_form">
-                <select name="language" id="language" onchange="this.form.submit()">
+                <select name="language" class="c-select" id="language" onchange="this.form.submit()">
                     {% for language in languages %}
                     <option value="{{language}}" {% if language == data.language %}selected{% endif %}>{{language}}</option>
                     {% endfor %}
@@ -21,7 +21,7 @@
             </form>
             <form action="?style" method="post">
                 <input type="hidden" name="form_id" value="style_form">
-                <select name="style" id="style" onchange="this.form.submit()">
+                <select name="style" class="c-select" id="style" onchange="this.form.submit()">
                     {% for style in styles %}
                     <option value="{{style}}" {% if style == data.style %}selected{% endif %}>{{style}}</option>
                     {% endfor %}
@@ -29,8 +29,92 @@
             </form>
         </div>
     </div>
-    <div>
-        1
-    </div>
+    <fieldset class="c-fieldset">
+        <legend><h2>{{i18n.info}}</h2></legend>
+        <div class="flex flex-between">
+            <ul class="grid-2 flex-1 grid-gap">
+                {% for key, value in data.info.items() %}
+                {% if key != 'photo' %}
+                <form action="?edit" method="post">
+                    <li class="flex flex-align-center">
+                        <div class="flex margin-after-8 bold">
+                            <label class="label-4" for="{{key}}">{{i18n.get(key, key)}}</label>
+                            :
+                        </div>
+                        <input class="c-input" type="text" name="info[{{key}}]" value="{{value}}" onchange="syncInputs(event)">
+                        <input type="hidden" name="delete-info" value="{{key}}">
+                        <input type="hidden" name="form_id" value="edit_form">
+                        <button type="submit" name="action" value="delete_info" class="c-button c-btn-small warning-btn">{{i18n.delete}}</button>
+                    </li>
+                </form>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            <div>
+                <button type="button" onclick="triggerFileInput()" class="photo-btn">
+                    <img src="{{url_for("static", filename=data.info.photo)}}" alt="Photo" id="photo">
+                </button>
+            </div>
+        </div>
+        <fieldset class="c-fieldset">
+            <legend><h3>{{i18n.add_more}}</h3></legend>
+            <form action="?edit" method="post">
+                <div class="flex gap-8">
+                    <input type="hidden" name="form_id" value="edit_form">
+                    <input type="text" class="c-input" name="info-key" id="info-key">
+                    <button type="submit" name="action" value="add_info" class="c-button">{{i18n.add}}</button>
+                </div>
+            </form>
+        </fieldset>
+    </fieldset>
+    <form action="?edit" id="form1" method="post" enctype="multipart/form-data">
+        {% for key, value in data.info.items() %}
+        {% if key != 'photo' %}
+        <input type="hidden" name="info[{{key}}]" value="{{value}}">
+        {% endif %}
+        {% endfor %}
+        <input type="file" id="photo-input" name="photo" accept="image/*" style="display: none;" onchange="handleFileChange(event)">
+        <input type="hidden" name="form_id" value="edit_form">
+        <div class="footer">
+            <button type="submit" name="action" value="save" class="c-button">{{i18n.save}}</button>
+            <button type="submit" name="action" value="cancel" class="c-button warning-btn">{{i18n.cancel}}</button>
+        </div>
+    </form>
+    <script>
+        function triggerFileInput() {
+            document.getElementById('photo-input').click();
+        }
+
+        function handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.querySelector('button img#photo').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function syncInputs(event) {
+        const sourceInput = event.target;
+
+        const inputName = sourceInput.name;
+
+        const inputs = document.querySelectorAll(`input[name="${inputName}"]`);
+
+        inputs.forEach(input => {
+            if (input !== sourceInput) {
+                input.value = sourceInput.value;
+            }
+        });
+    }
+
+    </script>
 </body>
 </html>
