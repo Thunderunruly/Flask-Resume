@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_file
 import json
 import os
 from werkzeug.utils import secure_filename
+import subprocess
 
 app = Flask(__name__)
 
@@ -140,4 +141,5 @@ def edit_page():
     )
 
 if __name__ == "__main__":
+    subprocess.run(["python", "init.py"])
     app.run(debug=True)
