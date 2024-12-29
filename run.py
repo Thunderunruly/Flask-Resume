@@ -165,6 +165,18 @@ def edit_page():
             json_write(file_path,experience_dist,"experience")
         return redirect(url_for("edit_page"))
 
+    def parse_duration(item):
+        try:
+            if 'duration' in item and item['duration']:
+                year, month = map(int, item['duration'].split(' - ')[1].split('-'))
+                return (year, month)
+            else:
+                return (0, 0)
+        except (IndexError, ValueError):
+            return (0, 0)
+
+    content['education'] = sorted(content['education'], key=parse_duration, reverse=True)
+    content['experience'] = sorted(content['experience'], key=parse_duration, reverse=True)
 
     return render_template("edit.html",
         data=content,
