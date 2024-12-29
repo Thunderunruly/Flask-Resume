@@ -115,7 +115,7 @@
                         {{experience.responsibilities}}
                     </p>
                     <h5 class="label-4">{{i18n.project_technology}}</h5>
-                    <div style="display: flex; gap: 4px;">
+                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
                         {% for tech in experience.technology_use %}
                         <div class="tag">{{tech}}</div>
                         {% endfor %}

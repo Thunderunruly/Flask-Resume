@@ -78,15 +78,15 @@
                             <div class="label-4">{{i18n.school}}</div>
                             :
                         </div>
-                        <input type="text" name="education[{{loop.index - 1}}][school]" style="flex: 1;" class="c-input" value="{{education.school}}" onchange="syncInputs(event)">
+                        <input type="text" name="education[{{loop.index0}}][school]" style="flex: 1;" class="c-input" value="{{education.school}}" onchange="syncInputs(event)">
                         <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][school_original_name]" onchange="syncInputs(event)" value="{{education.school_original_name}}"></span>
                     </div>
                     
                 </div>
                 <div style="margin-left: 8px; display: flex; justify-content: center; align-items: center; gap: 4px;">
-                    <input type="month" data-index="{{loop.index - 1}}" onchange="updateDuration(event, 'education')" value="{{education.duration.split(" - ")[0]}}" name="education[{{loop.index - 1}}][start]" class="c-input">
+                    <input type="month" data-index="{{loop.index0}}" onchange="updateDuration(event, 'education')" value="{{education.duration.split(" - ")[0]}}" name="education[{{loop.index - 1}}][start]" class="c-input">
                     <strong>-</strong>
-                    <input type="month" onchange="updateDuration(event, 'education')" data-index="{{loop.index - 1}}" value="{{education.duration.split(" - ")[1]}}" name="education[{{loop.index - 1}}][end]" class="c-input">
+                    <input type="month" onchange="updateDuration(event, 'education')" data-index="{{loop.index0}}" value="{{education.duration.split(" - ")[1]}}" name="education[{{loop.index - 1}}][end]" class="c-input">
                 </div>
             </div>
             <div style="display: flex; justify-content: space-between;">
@@ -95,13 +95,14 @@
                         <div class="label-4">{{i18n.major}}</div>
                         :
                     </div>
-                    <input type="text" name="education[{{loop.index - 1}}][major]" style="width: 50%;" value="{{education.major}}" class="c-input" onchange="syncInputs(event)">
+                    <input type="text" name="education[{{loop.index0}}][major]" style="width: 50%;" value="{{education.major}}" class="c-input" onchange="syncInputs(event)">
                     <span style="color: gray; margin-left: 8px; font-size: 14px; flex: 1;"><input type="text" class="c-input" name="education[{{loop.index - 1}}][major_orginal_name]" onchange="syncInputs(event)" value="{{education.major_orginal_name}}"></span>
                 </div>
             </div>
             <div>
                 <form action="?education" method="post" style="text-align: right; margin-top: 8px;">
                     <input type="hidden" name="form_id" value="education_form">
+                    <input type="hidden" name="education_index" value="{{loop.index0}}">
                     <button type="submit" class="c-button warning-btn" name="action" value="delete">{{i18n.delete}}</button>
                 </form>
             </div>
@@ -162,34 +163,45 @@
         <h2 class="label-4">{{i18n.experience}}</h2>
         <ul style="padding: 0; padding-left: 8px;">
             {% for experience in data.experience %}
+            {% set outer_loop = loop %}
             <li style="margin-bottom: 8px; list-style: none;">
                 <fieldset class="c-fieldset">
                     <div style="display: flex; gap: 4px; align-items: center;">
                         <input type="text" style="flex: 3;" value="{{experience.title}}" class="c-input" name="experience[{{loop.index - 1}}][title]" onchange="syncInputs(event)">
-                        <input type="month" style="flex: 1;" name="experience[{{loop.index - 1}}][start]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[0]}}">
+                        <input type="month" style="flex: 1;" name="experience[{{loop.index0}}][start]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[0]}}">
                         -
-                        <input type="month" style="flex: 1;" name="experience[{{loop.index - 1}}][end]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[1]}}">
+                        <input type="month" style="flex: 1;" name="experience[{{loop.index0}}][end]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[1]}}">
                     </div>
                     <div>
                         <h5 class="label-4">{{i18n.project_background}}</h5>
                         <div>
-                            <textarea name="experience[{{loop.index - 1}}][background]" id="experience[{{loop.index - 1}}][background]" rows="1" class="c-textarea" onchange="syncInputs(event)">{{experience.background}}</textarea>
+                            <textarea name="experience[{{loop.index0}}][background]" id="experience[{{loop.index0}}][background]" rows="1" class="c-textarea" onchange="syncInputs(event)">{{experience.background}}</textarea>
                         </div>
                         <h5 class="label-4">{{i18n.project_responsibilities}}</h5>
                         <div>
-                            <textarea name="experience[{{loop.index - 1}}][responsibilities]" id="experience[{{loop.index - 1}}][responsibilities]" rows="1" class="c-textarea" onchange="syncInputs(event)">{{experience.responsibilities}}</textarea>
+                            <textarea name="experience[{{loop.index0}}][responsibilities]" id="experience[{{loop.index0}}][responsibilities]" rows="1" class="c-textarea" onchange="syncInputs(event)">{{experience.responsibilities}}</textarea>
                         </div>
                         <h5 class="label-4">{{i18n.project_technology}}</h5>
-                        <div style="display: flex; gap: 4px;">
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
                             {% for tech in experience.technology_use %}
                             <div class="tag" style="display: flex;">
                                 {{tech}}
                                 <form action="?experience" method="post">
                                     <input type="hidden" name="form_id" value="experience_form">
-                                    <button type="submit" style="font-size: 12px; background: transparent; border: none; cursor: pointer;">X</button>
+                                    <input type="hidden" name="experience_index" value="{{outer_loop.index0}}">
+                                    <input type="hidden" name="tech_index" value="{{loop.index0}}">
+                                    <button type="submit" name="action" value="delete" style="font-size: 12px; background: transparent; border: none; cursor: pointer;">X</button>
                                 </form>
                             </div>
                             {% endfor %}
+                            <form action="?experience" method="post" class="c-fieldset" style="padding: 4px;">
+                                <input type="hidden" name="form_id" value="experience_form">
+                                <input type="hidden" name="experience_index" value="{{outer_loop.index0}}">
+                                <div class="flex" style="gap: 8px;">
+                                    <input type="text" class="c-input" name="new_tech">
+                                    <button type="submit" name="action" value="add" class="c-button">Add</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </fieldset>
@@ -298,6 +310,17 @@
                 durationInput.value = `${startInput.value} - ${endInput.value}`;
             }
         }
+
+        window.addEventListener('beforeunload', () => {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+
+        window.addEventListener('load', () => {
+            const scrollPosition = sessionStorage.getItem('scrollPosition');
+            if (scrollPosition) {
+                window.scrollTo({ top: parseInt(scrollPosition, 10), behavior: 'smooth' });
+            }
+        });
 
     </script>
 </body>

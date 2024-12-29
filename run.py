@@ -100,12 +100,12 @@ def edit_page():
 
     if request.method == 'POST':
         form_id = request.form.get('form_id')
+        action = request.form.get('action')
         if form_id == 'language_form':
             change_language(language)
         elif form_id == 'style_form':
             change_style(style)
         elif form_id == "edit_form":
-            action = request.form.get('action')
             if action == "save":
                 save_resume()
             elif action == "cancel":
@@ -117,7 +117,6 @@ def edit_page():
         elif form_id == "skill_form":
             skill_index = int(request.form['skill_index'])
             skill_key = request.form['skill_key']
-            action = request.form.get('action')
             skill = content['skill']
             if action == "add":
                 skill[skill_key].insert(skill_index, "")
@@ -130,9 +129,8 @@ def edit_page():
                 del skill[skill_key]
             json_write(file_path,skill,"skill")
         elif form_id == "education_form":
-            action = request.form.get("action")
+            education = content['education']
             if action == "add":
-                education = content['education']
                 education.append({
                     "school": "",
                     "school_original_name": "",
@@ -140,9 +138,23 @@ def edit_page():
                     "major": "",
                     "major_orginal_name": ""
                 },)
-                json_write(file_path, education, "education")
             elif action == "delete":
-                pass
+                education_index = int(request.form.get("education_index"))
+                education.pop(education_index)
+            json_write(file_path, education, "education")
+        elif form_id == "experience_form":
+            experience_index = int(request.form.get("experience_index"))
+            experience_dist = content['experience']
+            if action == "delete":
+                tech_index = int(request.form.get("tech_index"))
+                experience_dist[experience_index]["technology_use"].pop(tech_index)
+            elif action == "add":
+                new_tech = request.form.get("new_tech")
+                if "technology_use" not in experience_dist[experience_index]:
+                    experience_dist[experience_index]["technology_use"] = []
+                if new_tech not in experience_dist[experience_index]["technology_use"]:
+                    experience_dist[experience_index]["technology_use"].append(new_tech)
+            json_write(file_path,experience_dist,"experience")
         return redirect(url_for("edit_page"))
 
 
