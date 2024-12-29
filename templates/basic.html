@@ -35,7 +35,7 @@
                     {% if key != 'photo' %}
                     <li class="flex flex-align-center">
                         <div class="flex margin-after-8 bold">
-                            <div class="label-4">{{i18n[key]}}</div>
+                            <div class="label-4">{{i18n.get(key, key)}}</div>
                             :
                         </div>
                         {{value}}
