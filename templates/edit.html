@@ -168,9 +168,9 @@
                 <fieldset class="c-fieldset">
                     <div style="display: flex; gap: 4px; align-items: center;">
                         <input type="text" style="flex: 3;" value="{{experience.title}}" class="c-input" name="experience[{{loop.index - 1}}][title]" onchange="syncInputs(event)">
-                        <input type="month" style="flex: 1;" name="experience[{{loop.index0}}][start]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[0]}}">
+                        <input type="month" style="flex: 1;" data-index="{{loop.index0}}" name="experience[{{loop.index0}}][start]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[0]}}">
                         -
-                        <input type="month" style="flex: 1;" name="experience[{{loop.index0}}][end]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[1]}}">
+                        <input type="month" style="flex: 1;" data-index="{{loop.index0}}" name="experience[{{loop.index0}}][end]" onchange="updateDuration(event, 'experience')" class="c-input" id="" value="{{experience.duration.split(" - ")[1]}}">
                     </div>
                     <div>
                         <h5 class="label-4">{{i18n.project_background}}</h5>
@@ -190,7 +190,7 @@
                                     <input type="hidden" name="form_id" value="experience_form">
                                     <input type="hidden" name="experience_index" value="{{outer_loop.index0}}">
                                     <input type="hidden" name="tech_index" value="{{loop.index0}}">
-                                    <button type="submit" name="action" value="delete" style="font-size: 12px; background: transparent; border: none; cursor: pointer;">X</button>
+                                    <button type="submit" name="action" value="delete_tag" style="font-size: 12px; background: transparent; border: none; cursor: pointer;">X</button>
                                 </form>
                             </div>
                             {% endfor %}
@@ -199,7 +199,7 @@
                                 <input type="hidden" name="experience_index" value="{{outer_loop.index0}}">
                                 <div class="flex" style="gap: 8px;">
                                     <input type="text" class="c-input" name="new_tech">
-                                    <button type="submit" name="action" value="add" class="c-button">Add</button>
+                                    <button type="submit" name="action" value="add_tag" class="c-button">{{i18n.add}}</button>
                                 </div>
                             </form>
                         </div>
@@ -207,6 +207,12 @@
                 </fieldset>
             </li>
             {% endfor %}
+            <fieldset class="c-fieldset">
+                <form action="?experience" method="post">
+                    <input type="hidden" name="form_id" value="experience_form">
+                    <button type="submit" name="action" value="add" class="c-button">{{i18n.add_more}}</button>
+                </form>
+            </fieldset>
         </ul>
     </div>
     
@@ -223,11 +229,11 @@
         {% endif %}
         {% endfor %}
         {% for education in data.education %}
-        <input type="hidden" name="education[{{loop.index - 1}}][school]" style="flex: 1;" value="{{education.school}}">
-        <input type="hidden" name="education[{{loop.index - 1}}][school_original_name]" value="{{education.school_original_name}}">
-        <input type="hidden" name="education[{{loop.index - 1}}][duration]" value="{{education.duration}}">
-        <input type="hidden" name="education[{{loop.index - 1}}][major]" value="{{education.major}}">
-        <input type="hidden" name="education[{{loop.index - 1}}][major_orginal_name]" value="{{education.major_orginal_name}}">
+        <input type="hidden" name="education[{{loop.index0}}][school]" style="flex: 1;" value="{{education.school}}">
+        <input type="hidden" name="education[{{loop.index0}}][school_original_name]" value="{{education.school_original_name}}">
+        <input type="hidden" name="education[{{loop.index0}}][duration]" value="{{education.duration}}">
+        <input type="hidden" name="education[{{loop.index0}}][major]" value="{{education.major}}">
+        <input type="hidden" name="education[{{loop.index0}}][major_orginal_name]" value="{{education.major_orginal_name}}">
         {% endfor %}
         {% for category, skills in data.skill.items() %}
         {% for skill in skills %}
@@ -235,10 +241,14 @@
             {% endfor %}
         {% endfor %}
         {% for experience in data.experience %}
-        <input type="hidden" value="{{experience.title}}" name="experience[{{loop.index - 1}}][title]">
-        <input type="hidden" value="{{experience.time}}" name="experience[{{loop.index - 1}}][duration]">
-        <input type="hidden" value="{{experience.background}}" name="experience[{{loop.index - 1}}][background]">
-        <input type="hidden" value="{{experience.responsibilities}}" name="experience[{{loop.index - 1}}][responsibilities]">
+        {% set outer_loop = loop %}
+        <input type="hidden" value="{{experience.title}}" name="experience[{{loop.index0}}][title]">
+        <input type="hidden" value="{{experience.duration}}" name="experience[{{loop.index0}}][duration]">
+        <input type="hidden" value="{{experience.background}}" name="experience[{{loop.index0}}][background]">
+        <input type="hidden" value="{{experience.responsibilities}}" name="experience[{{loop.index0}}][responsibilities]">
+        {% for tech in experience.technology_use %}
+        <input type="hidden" name="experience[{{outer_loop.index0}}][technology_use][{{loop.index0}}]" value="{{tech}}">
+        {% endfor %}
         {% endfor %}
         <input type="file" id="photo-input" name="photo" accept="image/*" style="display: none;" onchange="handleFileChange(event)">
         <input type="hidden" name="form_id" value="edit_form">

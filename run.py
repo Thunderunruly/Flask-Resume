@@ -143,17 +143,25 @@ def edit_page():
                 education.pop(education_index)
             json_write(file_path, education, "education")
         elif form_id == "experience_form":
-            experience_index = int(request.form.get("experience_index"))
+            experience_index = int(request.form.get("experience_index", 0))
             experience_dist = content['experience']
-            if action == "delete":
+            if action == "delete_tag":
                 tech_index = int(request.form.get("tech_index"))
                 experience_dist[experience_index]["technology_use"].pop(tech_index)
-            elif action == "add":
+            elif action == "add_tag":
                 new_tech = request.form.get("new_tech")
                 if "technology_use" not in experience_dist[experience_index]:
                     experience_dist[experience_index]["technology_use"] = []
                 if new_tech not in experience_dist[experience_index]["technology_use"]:
                     experience_dist[experience_index]["technology_use"].append(new_tech)
+            elif action == "add":
+                experience_template = {
+                    "duration": "",
+                    "title": "",
+                    "background": "",
+                    "responsibilities": ""
+                }
+                experience_dist.append(experience_template)
             json_write(file_path,experience_dist,"experience")
         return redirect(url_for("edit_page"))
 
@@ -227,7 +235,10 @@ def save_resume():
             field = key.split('[')[2].split(']')[0]
             while len(experience_dist) <= index:
                 experience_dist.append({})
-            experience_dist[index][field] = value
+            if field == "technology_use":
+                experience_dist[index].setdefault(field, []).append(value)
+            else:
+                experience_dist[index][field] = value
     json_write(file_path,experience_dist,"experience")
 
 if __name__ == "__main__":
